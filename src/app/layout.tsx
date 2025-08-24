@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/components/Providers";
+import { Playfair_Display, DM_Sans } from "next/font/google";
+
+const playfair = Playfair_Display({
+	subsets: ["latin"],
+	variable: "--font-playfair",
+	display: "swap",
+});
+
+const dmSans = DM_Sans({
+	subsets: ["latin"],
+	variable: "--font-dmsans",
+	display: "swap",
+});
 
 export const metadata: Metadata = {
 	title: "NextJS Web Builder",
@@ -14,7 +27,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="cs" suppressHydrationWarning>
-			<body className={`antialiased`}>
+			<body className={`${playfair.variable} ${dmSans.variable} antialiased`}>
 				<Providers>{children}</Providers>
 			</body>
 		</html>
