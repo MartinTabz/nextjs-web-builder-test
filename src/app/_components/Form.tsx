@@ -18,7 +18,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import RichTextEditor from "@/components/Form/RichTextEditor";
+import RichTextEditor from "@/components/FormContent/RichTextEditor";
 
 // Helper function to generate slug
 const generateSlug = (text: string) => {
