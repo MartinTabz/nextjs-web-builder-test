@@ -8,12 +8,64 @@ The WebBuilder component now supports form integration with `onChange` and `cont
 type Props = {
 	content: string; // JSON string of saved content
 	onChange: (e: string) => void; // Callback when content changes
-	disabled?: boolean; // Disable editing (read-only mode)
+	disabled?: boolean; // Prevents opening (external control only)
 	showNavigation?: boolean; // Show/hide navigation bar
+	isOpen: boolean; // Controls modal visibility
+	setOpen: (open: boolean) => void; // Function to open/close modal
 };
 ```
 
 ## Usage Examples
+
+### Modal WebBuilder Integration
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import WebBuilder from "@/components/FormContent/WebBuilder";
+import { Button } from "@/components/ui/button";
+
+export default function PageEditor() {
+	const [content, setContent] = useState<string>("");
+	const [isBuilderOpen, setIsBuilderOpen] = useState(false);
+	const [isReadOnly, setIsReadOnly] = useState(false);
+
+	const handleSave = () => {
+		// Save content to database
+		console.log("Saving:", content);
+		setIsBuilderOpen(false);
+	};
+
+	return (
+		<div>
+			<div className="mb-4 flex gap-2">
+				<Button onClick={() => setIsBuilderOpen(true)}>
+					Edit Page Content
+				</Button>
+				<Button onClick={() => setIsReadOnly(!isReadOnly)} variant="outline">
+					{isReadOnly ? "Enable Editing" : "Make Read-Only"}
+				</Button>
+			</div>
+
+			<div className="border p-4 bg-gray-50">
+				<p>Current content: {content ? "Configured" : "Empty"}</p>
+				<p>Mode: {isReadOnly ? "Read-only" : "Editable"}</p>
+			</div>
+
+			{/* Modal WebBuilder */}
+			<WebBuilder
+				content={content}
+				onChange={setContent}
+				disabled={isReadOnly}
+				isOpen={isBuilderOpen}
+				setOpen={setIsBuilderOpen}
+				showNavigation={true}
+			/>
+		</div>
+	);
+}
+```
 
 ### Basic Form Integration
 
@@ -26,6 +78,7 @@ import WebBuilder from "@/components/FormContent/WebBuilder";
 export default function MyFormPage() {
 	const [webBuilderContent, setWebBuilderContent] = useState<string>("");
 	const [isReadOnly, setIsReadOnly] = useState(false);
+	const [isBuilderOpen, setIsBuilderOpen] = useState(false);
 
 	const handleSave = () => {
 		// Save webBuilderContent to your database
@@ -35,6 +88,7 @@ export default function MyFormPage() {
 	return (
 		<div>
 			<div className="mb-4 flex gap-2">
+				<button onClick={() => setIsBuilderOpen(true)}>Open WebBuilder</button>
 				<button onClick={() => setIsReadOnly(!isReadOnly)}>
 					{isReadOnly ? "Enable Editing" : "Disable Editing"}
 				</button>
@@ -45,6 +99,8 @@ export default function MyFormPage() {
 				content={webBuilderContent}
 				onChange={setWebBuilderContent}
 				disabled={isReadOnly}
+				isOpen={isBuilderOpen}
+				setOpen={setIsBuilderOpen}
 				showNavigation={true}
 			/>
 		</div>
@@ -75,6 +131,7 @@ export default function PageEditorForm() {
 		},
 	});
 
+	const [isBuilderOpen, setIsBuilderOpen] = useState(false);
 	const isPublished = watch("isPublished");
 
 	const onSubmit = (data: FormData) => {
@@ -114,6 +171,11 @@ export default function PageEditorForm() {
 
 			<div className="mb-4">
 				<label>Page Content</label>
+				<div className="mb-2">
+					<Button type="button" onClick={() => setIsBuilderOpen(true)}>
+						Edit Page Content
+					</Button>
+				</div>
 				<Controller
 					name="pageContent"
 					control={control}
@@ -122,6 +184,8 @@ export default function PageEditorForm() {
 							content={field.value}
 							onChange={field.onChange}
 							disabled={isPublished}
+							isOpen={isBuilderOpen}
+							setOpen={setIsBuilderOpen}
 							showNavigation={true}
 						/>
 					)}
@@ -237,10 +301,13 @@ The WebBuilder saves/loads content as a JSON string with this structure:
 
 ## Features
 
+✅ **Controlled Modal** - Fully controllable popup/modal behavior  
+✅ **External Control** - Open/close from parent components  
+✅ **Auto-close on Save** - "Uložit & Zavřít" button closes the modal  
+✅ **Simple Disabled Logic** - `disabled={true}` prevents opening entirely  
 ✅ **Controlled Component** - Works like any other form input  
 ✅ **Initial Content Loading** - Pass existing content via `content` prop  
 ✅ **Real-time Updates** - `onChange` fires when user makes changes  
-✅ **Read-only Mode** - Use `disabled` prop to prevent editing  
 ✅ **Prevents Initial Trigger** - Won't call `onChange` during initial load  
 ✅ **Error Handling** - Gracefully handles invalid JSON content  
 ✅ **TypeScript Support** - Full type safety

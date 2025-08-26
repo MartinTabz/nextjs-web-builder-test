@@ -39,7 +39,6 @@ export type HistoryState = {
 export type EditorState = {
 	editor: Editor;
 	history: HistoryState;
-	disabled?: boolean;
 };
 
 const initialEditorState: EditorState["editor"] = {
@@ -72,7 +71,6 @@ const initialHistoryState: HistoryState = {
 const initialState: EditorState = {
 	editor: initialEditorState,
 	history: initialHistoryState,
-	disabled: false,
 };
 
 const addAnElement = (
@@ -354,16 +352,18 @@ export type EditorContextData = {
 export const EditorContext = createContext<{
 	state: EditorState;
 	dispatch: Dispatch<EditorAction>;
+	setOpen?: (open: boolean) => void;
 }>({
 	state: initialState,
 	dispatch: () => undefined,
+	setOpen: undefined,
 });
 
 type EditorProps = {
 	children: React.ReactNode;
 	content?: string;
 	onChange?: (content: string) => void;
-	disabled?: boolean;
+	setOpen?: (open: boolean) => void;
 };
 
 const EditorProvider = (props: EditorProps) => {
@@ -406,12 +406,9 @@ const EditorProvider = (props: EditorProps) => {
 	return (
 		<EditorContext.Provider
 			value={{
-				state: {
-					...state,
-					// Add disabled state to context
-					disabled: props.disabled || false,
-				},
+				state,
 				dispatch,
+				setOpen: props.setOpen,
 			}}
 		>
 			{props.children}

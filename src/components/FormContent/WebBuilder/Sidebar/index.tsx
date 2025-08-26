@@ -18,7 +18,6 @@ import ComponentsTab from "./Tabs/ComponentsTab";
 
 export default function PageEditorSidebar() {
 	const { state, dispatch } = useEditor();
-	const isDisabled = state.disabled;
 
 	return (
 		<Sheet open={true} modal={false}>
@@ -29,7 +28,7 @@ export default function PageEditorSidebar() {
 					className={clsx(
 						"mt-[97px] w-16 z-[80] shadow-none p-0 focus:border-none transition-all overflow-hidden bg-sidebar",
 						{
-							hidden: state.editor.previewMode || isDisabled,
+							hidden: state.editor.previewMode,
 						}
 					)}
 				>
