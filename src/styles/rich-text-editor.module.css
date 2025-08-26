@@ -38,6 +38,9 @@
 	padding-top: 20px;
 	padding-bottom: 5px;
 }
+.rich_text_editor h2:first-child {
+	padding-top: 0;
+}
 .rich_text_editor h3 {
 	font-size: 1.8rem;
 	font-weight: bold;
