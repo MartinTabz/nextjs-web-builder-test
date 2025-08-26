@@ -18,6 +18,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import RichTextEditor from "@/components/Form/RichTextEditor";
 
 // Helper function to generate slug
 const generateSlug = (text: string) => {
@@ -47,6 +48,7 @@ const formSchema = z.object({
 		.refine(slugRefine, {
 			message: "Slug must contain only letters, numbers, and hyphens.",
 		}),
+	content: z.string().min(1, { message: "Content is required." }),
 });
 
 export function SimpleForm() {
@@ -55,6 +57,7 @@ export function SimpleForm() {
 		defaultValues: {
 			name: "",
 			slug: "",
+			content: "",
 		},
 	});
 
@@ -70,7 +73,7 @@ export function SimpleForm() {
 	}, [nameValue, form]);
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		toast.success("Form submitted successfully!", {
+		toast("Form submitted successfully!", {
 			description: (
 				<pre className="mt-2 relative overflow-scroll bg-muted w-[320px] rounded-md p-4">
 					<code>{JSON.stringify(values, null, 2)}</code>
@@ -81,54 +84,73 @@ export function SimpleForm() {
 	}
 
 	return (
-		<Card className="max-w-md mx-auto mt-8">
-			<CardHeader>
-				<CardTitle>Create New Item</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-						<FormField
-							control={form.control}
-							name="name"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Name</FormLabel>
-									<FormControl>
-										<Input placeholder="Enter item name" {...field} />
-									</FormControl>
-									<FormDescription>
-										Enter a descriptive name (3-100 characters).
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+		<section className="flex flex-col gap-4 items-center">
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+					<Card className="max-w-md mx-auto mt-8">
+						<CardHeader>
+							<CardTitle>Create New Item</CardTitle>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							<FormField
+								control={form.control}
+								name="name"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Name</FormLabel>
+										<FormControl>
+											<Input placeholder="Enter item name" {...field} />
+										</FormControl>
+										<FormDescription>
+											Enter a descriptive name (3-100 characters).
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-						<FormField
-							control={form.control}
-							name="slug"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Slug</FormLabel>
-									<FormControl>
-										<Input placeholder="auto-generated-slug" {...field} />
-									</FormControl>
-									<FormDescription>
-										URL-friendly identifier (auto-generated from name,
-										editable).
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+							<FormField
+								control={form.control}
+								name="slug"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Slug</FormLabel>
+										<FormControl>
+											<Input placeholder="auto-generated-slug" {...field} />
+										</FormControl>
+										<FormDescription>
+											URL-friendly identifier (auto-generated from name,
+											editable).
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-						<Button type="submit" className="w-full">
-							Create Item
-						</Button>
-					</form>
-				</Form>
-			</CardContent>
-		</Card>
+							<FormField
+								control={form.control}
+								name="content"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Content</FormLabel>
+										<FormControl>
+											<RichTextEditor
+												content={field.value}
+												onChange={field.onChange}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</CardContent>
+					</Card>
+
+					<Button type="submit" className="w-fit mx-auto">
+						Create Item
+					</Button>
+				</form>
+			</Form>
+		</section>
 	);
 }
