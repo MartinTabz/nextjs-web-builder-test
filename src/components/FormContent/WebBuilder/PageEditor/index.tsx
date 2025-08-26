@@ -6,12 +6,14 @@ import clsx from "clsx";
 import { EyeOff } from "lucide-react";
 import { useEffect } from "react";
 import Recursive from "./PageEditorComponents/recursive";
+import SiteNav from "./DummyComponents/SiteNav";
 
 type Props = {
 	liveMode?: boolean;
+	showNavigation?: boolean;
 };
 
-export default function PageEditor({ liveMode }: Props) {
+export default function PageEditor({ liveMode, showNavigation = true }: Props) {
 	const { dispatch, state } = useEditor();
 
 	useEffect(() => {
@@ -63,6 +65,7 @@ export default function PageEditor({ liveMode }: Props) {
 					<EyeOff />
 				</Button>
 			)}
+			{showNavigation && <SiteNav />}
 			{Array.isArray(state.editor.elements) &&
 				state.editor.elements.map((childElement: EditorElement) => (
 					<Recursive key={childElement.id} element={childElement} />
