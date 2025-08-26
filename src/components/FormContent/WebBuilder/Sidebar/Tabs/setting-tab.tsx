@@ -44,9 +44,9 @@ export default function SettingsTab() {
 	const [bgClrPickerOpened, setBgClrPickerOpened] = useState<boolean>(false);
 	const [clrPickerOpened, setClrPickerOpened] = useState<boolean>(false);
 
-	const handleChangeCustomValues = (e: any) => {
+	const handleChangeCustomValues = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const settingsProperty = e.target.id;
-		let value = e.target.value;
+		const value = e.target.value;
 		const styleObject = {
 			[settingsProperty]: value,
 		};
@@ -65,12 +65,31 @@ export default function SettingsTab() {
 		});
 	};
 
-	const handleOnChanges = (e: any) => {
+	const handleOnChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const styleSettings = e.target.id;
-		let value = e.target.value;
+		const value = e.target.value;
 
 		const styleObject = {
 			[styleSettings]: value,
+		};
+
+		dispatch({
+			type: "UPDATE_ELEMENT",
+			payload: {
+				elementDetails: {
+					...state.editor.selectedElement,
+					styles: {
+						...state.editor.selectedElement.styles,
+						...styleObject,
+					},
+				},
+			},
+		});
+	};
+
+	const handleStyleChange = (property: string, value: string) => {
+		const styleObject = {
+			[property]: value,
 		};
 
 		dispatch({
@@ -120,14 +139,7 @@ export default function SettingsTab() {
 						<div className="flex flex-col gap-2 w-full">
 							<Label className="text-muted-foreground">Zarovnání textu</Label>
 							<Tabs
-								onValueChange={(e) =>
-									handleOnChanges({
-										target: {
-											id: "textAlign",
-											value: e,
-										},
-									})
-								}
+								onValueChange={(e) => handleStyleChange("textAlign", e)}
 								value={state.editor.selectedElement.styles.textAlign}
 								className="w-full"
 							>
@@ -196,14 +208,7 @@ export default function SettingsTab() {
 							<div className="col-span-2 flex flex-col gap-2">
 								<Label className="text-muted-foreground">Váha</Label>
 								<Select
-									onValueChange={(e) => {
-										handleOnChanges({
-											target: {
-												id: "fontWeight",
-												value: e,
-											},
-										});
-									}}
+									onValueChange={(e) => handleStyleChange("fontWeight", e)}
 									value={
 										state.editor.selectedElement.styles.fontWeight?.toString() ||
 										""
@@ -375,11 +380,7 @@ export default function SettingsTab() {
 								</small>
 							</div>
 							<Slider
-								onValueChange={(e) => {
-									handleOnChanges({
-										target: { id: "opacity", value: `${e[0]}%` },
-									});
-								}}
+								onValueChange={(e) => handleStyleChange("opacity", `${e[0]}%`)}
 								defaultValue={[
 									typeof state.editor.selectedElement.styles?.opacity ===
 									"number"
@@ -415,11 +416,9 @@ export default function SettingsTab() {
 								</small>
 							</div>
 							<Slider
-								onValueChange={(e) => {
-									handleOnChanges({
-										target: { id: "borderRadius", value: `${e[0]}px` },
-									});
-								}}
+								onValueChange={(e) =>
+									handleStyleChange("borderRadius", `${e[0]}px`)
+								}
 								defaultValue={[
 									typeof state.editor.selectedElement.styles?.borderRadius ===
 									"number"
@@ -485,14 +484,7 @@ export default function SettingsTab() {
 						<div className="flex flex-col gap-2 w-full">
 							<Label className="text-muted-foreground">Pozice obrázku</Label>
 							<Tabs
-								onValueChange={(e) =>
-									handleOnChanges({
-										target: {
-											id: "objectPosition",
-											value: e,
-										},
-									})
-								}
+								onValueChange={(e) => handleStyleChange("objectPosition", e)}
 								value={state.editor.selectedElement.styles.objectPosition?.toString()}
 								className="w-full"
 							>
@@ -528,14 +520,9 @@ export default function SettingsTab() {
 							<Checkbox
 								className="cursor-pointer"
 								id="flex"
-								onCheckedChange={(e) => {
-									handleOnChanges({
-										target: {
-											id: "display",
-											value: e == true ? "flex" : "block",
-										},
-									});
-								}}
+								onCheckedChange={(e) =>
+									handleStyleChange("display", e == true ? "flex" : "block")
+								}
 								checked={
 									state.editor.selectedElement.styles.display == "flex"
 										? true
@@ -554,14 +541,7 @@ export default function SettingsTab() {
 						<div className="flex flex-col gap-2 w-full">
 							<Label className="text-muted-foreground">Justify Content</Label>
 							<Tabs
-								onValueChange={(e) =>
-									handleOnChanges({
-										target: {
-											id: "justifyContent",
-											value: e,
-										},
-									})
-								}
+								onValueChange={(e) => handleStyleChange("justifyContent", e)}
 								value={state.editor.selectedElement.styles.justifyContent}
 								className="w-full"
 							>
@@ -604,14 +584,7 @@ export default function SettingsTab() {
 						<div className="flex flex-col gap-2 w-full">
 							<Label className="text-muted-foreground">Align items</Label>
 							<Tabs
-								onValueChange={(e) =>
-									handleOnChanges({
-										target: {
-											id: "alignItems",
-											value: e,
-										},
-									})
-								}
+								onValueChange={(e) => handleStyleChange("alignItems", e)}
 								value={state.editor.selectedElement.styles.alignItems}
 								className="w-full"
 							>
@@ -644,14 +617,7 @@ export default function SettingsTab() {
 								{"Směr (Direction)"}
 							</Label>
 							<Select
-								onValueChange={(e) => {
-									handleOnChanges({
-										target: {
-											id: "flexDirection",
-											value: e,
-										},
-									});
-								}}
+								onValueChange={(e) => handleStyleChange("flexDirection", e)}
 								value={state.editor.selectedElement.styles.flexDirection}
 							>
 								<SelectTrigger className="w-full">
@@ -671,11 +637,7 @@ export default function SettingsTab() {
 					<div className="w-[200px] flex flex-col gap-3">
 						<HexColorPicker
 							color={state.editor.selectedElement.styles.backgroundColor}
-							onChange={(e) => {
-								handleOnChanges({
-									target: { id: "backgroundColor", value: e },
-								});
-							}}
+							onChange={(e) => handleStyleChange("backgroundColor", e)}
 						/>
 						<Input
 							value={state.editor.selectedElement.styles.backgroundColor || ""}
@@ -698,11 +660,7 @@ export default function SettingsTab() {
 					<div className="w-[200px] flex flex-col gap-3">
 						<HexColorPicker
 							color={state.editor.selectedElement.styles.color}
-							onChange={(e) => {
-								handleOnChanges({
-									target: { id: "color", value: e },
-								});
-							}}
+							onChange={(e) => handleStyleChange("color", e)}
 						/>
 						<Input
 							value={state.editor.selectedElement.styles.color || ""}

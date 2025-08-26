@@ -1,8 +1,6 @@
 import { EditorBtns } from "../../../Utilities/constants";
 
-type Props = {};
-
-export default function ContainerPlaceholder(props: Props) {
+export default function ContainerPlaceholder() {
 	const handleDragState = (e: React.DragEvent, type: EditorBtns) => {
 		if (type === null) return;
 		e.dataTransfer.setData("componentType", type);

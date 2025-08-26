@@ -8,9 +8,7 @@ import { EditorBtns } from "../../../Utilities/constants";
 import TextPlaceholder from "./text-placeholder";
 import ContainerPlaceholder from "./container-placeholder";
 
-type Props = {};
-
-export default function ComponentsTab(props: Props) {
+export default function ComponentsTab() {
 	const elements: {
 		Component: React.ReactNode;
 		label: string;
