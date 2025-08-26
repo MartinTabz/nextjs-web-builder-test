@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 export default function WebBuilderNavigation() {
 	const router = useRouter();
 	const { state, dispatch } = useEditor();
+	const isDisabled = state.disabled;
 
 	const handlePreviewClick = () => {
 		dispatch({ type: "TOGGLE_PREVIEW_MODE" });
@@ -44,23 +45,26 @@ export default function WebBuilderNavigation() {
 					{ "!h-0 !p-0 !overflow-hidden": state.editor.previewMode }
 				)}
 			>
-            <div></div>
+				<div></div>
 				<aside>
 					<Tabs
 						defaultValue="Desktop"
 						className="w-fit"
 						value={state.editor.device}
 						onValueChange={(value) => {
-							dispatch({
-								type: "CHANGE_DEVICE",
-								payload: { device: value as DeviceTypes },
-							});
+							if (!isDisabled) {
+								dispatch({
+									type: "CHANGE_DEVICE",
+									payload: { device: value as DeviceTypes },
+								});
+							}
 						}}
 					>
 						<TabsList className="grid w-full grid-cols-3 bg-transparent h-fit">
 							<TabsTrigger
 								value="Desktop"
 								className="data-[state=active]:bg-muted w-10 h-10 p-0 cursor-pointer"
+								disabled={isDisabled}
 							>
 								<Laptop />
 							</TabsTrigger>
@@ -68,6 +72,7 @@ export default function WebBuilderNavigation() {
 							<TabsTrigger
 								value="Tablet"
 								className="data-[state=active]:bg-muted w-10 h-10 p-0 cursor-pointer"
+								disabled={isDisabled}
 							>
 								<Tablet />
 							</TabsTrigger>
@@ -75,6 +80,7 @@ export default function WebBuilderNavigation() {
 							<TabsTrigger
 								value="Mobile"
 								className="data-[state=active]:bg-muted w-10 h-10 p-0 cursor-pointer"
+								disabled={isDisabled}
 							>
 								<Smartphone />
 							</TabsTrigger>
@@ -87,6 +93,7 @@ export default function WebBuilderNavigation() {
 						size={"icon"}
 						className="hover:bg-slate-800"
 						onClick={handlePreviewClick}
+						disabled={isDisabled}
 					>
 						<EyeIcon />
 					</Button>
@@ -95,7 +102,7 @@ export default function WebBuilderNavigation() {
 						size={"icon"}
 						className="hover:bg-slate-800"
 						onClick={handleUndo}
-						disabled={!(state.history.currentIndex > 0)}
+						disabled={isDisabled || !(state.history.currentIndex > 0)}
 					>
 						<Undo2 />
 					</Button>
@@ -105,12 +112,15 @@ export default function WebBuilderNavigation() {
 						className="hover:bg-slate-800 mr-4"
 						onClick={handleRedo}
 						disabled={
+							isDisabled ||
 							!(state.history.currentIndex < state.history.history.length - 1)
 						}
 					>
 						<Redo2 />
 					</Button>
-					<Button onClick={handleOnSave}>Uložit & Zavřít</Button>
+					<Button onClick={handleOnSave} disabled={isDisabled}>
+						Uložit & Zavřít
+					</Button>
 				</aside>
 			</nav>
 		</TooltipProvider>

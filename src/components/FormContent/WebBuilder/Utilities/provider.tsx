@@ -2,11 +2,18 @@
 
 import { EditorBtns } from "./constants";
 import { EditorAction } from "./actions";
-import { createContext, Dispatch, useContext, useReducer } from "react";
+import {
+	createContext,
+	Dispatch,
+	useContext,
+	useReducer,
+	useEffect,
+	useState,
+} from "react";
 
 export type DeviceTypes = "Desktop" | "Mobile" | "Tablet";
 
-type LinkLike = { href?: string; innerText?: string }
+type LinkLike = { href?: string; innerText?: string };
 
 export type EditorElement = {
 	id: string;
@@ -32,6 +39,7 @@ export type HistoryState = {
 export type EditorState = {
 	editor: Editor;
 	history: HistoryState;
+	disabled?: boolean;
 };
 
 const initialEditorState: EditorState["editor"] = {
@@ -64,6 +72,7 @@ const initialHistoryState: HistoryState = {
 const initialState: EditorState = {
 	editor: initialEditorState,
 	history: initialHistoryState,
+	disabled: false,
 };
 
 const addAnElement = (
@@ -352,15 +361,56 @@ export const EditorContext = createContext<{
 
 type EditorProps = {
 	children: React.ReactNode;
+	content?: string;
+	onChange?: (content: string) => void;
+	disabled?: boolean;
 };
 
 const EditorProvider = (props: EditorProps) => {
 	const [state, dispatch] = useReducer(editorReducer, initialState);
+	const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+	// Load initial content when component mounts or content prop changes
+	useEffect(() => {
+		if (props.content) {
+			try {
+				const parsedContent = JSON.parse(props.content);
+				dispatch({
+					type: "LOAD_DATA",
+					payload: {
+						elements: parsedContent.elements || [],
+						withLive: false,
+					},
+				});
+				setIsInitialLoad(false);
+			} catch (error) {
+				console.warn("Failed to parse WebBuilder content:", error);
+				setIsInitialLoad(false);
+			}
+		} else {
+			setIsInitialLoad(false);
+		}
+	}, [props.content]);
+
+	// Call onChange when editor elements change (but not during initial load)
+	useEffect(() => {
+		if (!isInitialLoad && props.onChange && state.editor.elements) {
+			const contentToSave = {
+				elements: state.editor.elements,
+				device: state.editor.device,
+			};
+			props.onChange(JSON.stringify(contentToSave));
+		}
+	}, [state.editor.elements, props.onChange, isInitialLoad]);
 
 	return (
 		<EditorContext.Provider
 			value={{
-				state,
+				state: {
+					...state,
+					// Add disabled state to context
+					disabled: props.disabled || false,
+				},
 				dispatch,
 			}}
 		>
