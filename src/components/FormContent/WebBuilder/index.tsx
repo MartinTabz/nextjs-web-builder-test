@@ -15,7 +15,7 @@ export default function WebBuilder({ content, onChange, disabled }: Props) {
 			<EditorProvider>
 				<WebBuilderNavigation />
 
-				<div className="h-full flex justify-center bg-muted">
+				<div className="h-full flex justify-center bg-sidebar">
 					<PageEditor liveMode={false} />
 				</div>
 

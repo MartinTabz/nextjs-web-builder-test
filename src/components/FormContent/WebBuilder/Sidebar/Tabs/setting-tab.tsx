@@ -110,7 +110,7 @@ export default function SettingsTab() {
 		<>
 			<Accordion
 				type="multiple"
-				className="w-full"
+				className="w-full bg-sidebar"
 				defaultValue={["Typografie", "Rozmery", "Dekorace", "Flexbox"]}
 			>
 				<AccordionItem value="Custom" className="px-6 py-0">

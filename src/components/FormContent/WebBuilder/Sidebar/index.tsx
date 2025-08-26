@@ -26,7 +26,7 @@ export default function PageEditorSidebar() {
 					showX={false}
 					side="right"
 					className={clsx(
-						"mt-[97px] w-16 z-[80] shadow-none p-0 focus:border-none transition-all overflow-hidden",
+						"mt-[97px] w-16 z-[80] shadow-none p-0 focus:border-none transition-all overflow-hidden bg-sidebar",
 						{ hidden: state.editor.previewMode }
 					)}
 				>
@@ -42,7 +42,7 @@ export default function PageEditorSidebar() {
 					showX={false}
 					side="right"
 					className={clsx(
-						"mt-[97px] w-80 z-[40] shadow-none p-0 mr-16 bg-background h-full transition-all overflow-hidden",
+						"mt-[97px] w-80 bg-sidebar z-[40] shadow-none p-0 mr-16 h-full transition-all overflow-hidden",
 						{ hidden: state.editor.previewMode }
 					)}
 				>

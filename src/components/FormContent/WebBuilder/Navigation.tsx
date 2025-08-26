@@ -40,7 +40,7 @@ export default function WebBuilderNavigation() {
 		<TooltipProvider>
 			<nav
 				className={clsx(
-					"flex items-center justify-between p-6 gap-2 transition-all",
+					"flex items-center border-b justify-between bg-sidebar p-6 gap-2 transition-all",
 					{ "!h-0 !p-0 !overflow-hidden": state.editor.previewMode }
 				)}
 			>
