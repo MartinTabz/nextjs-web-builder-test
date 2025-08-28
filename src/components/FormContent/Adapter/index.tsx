@@ -26,9 +26,10 @@ export default function FormContentAdapter({ content, onUpdate }: Props) {
 	const handleTypeChange = React.useCallback(
 		(value: string) => {
 			if (value === currentType) return;
-			onUpdate({ type: value as Content["type"], content: currentContent });
+			// Clear content when switching modes to avoid leaking JSON/HTML
+			onUpdate({ type: value as Content["type"], content: "" });
 		},
-		[onUpdate, currentType, currentContent]
+		[onUpdate, currentType]
 	);
 
 	const handleRteChange = React.useCallback(
