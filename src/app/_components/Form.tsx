@@ -126,13 +126,19 @@ export function SimpleForm() {
 									</FormItem>
 								)}
 							/>
+						</CardContent>
+					</Card>
 
+					<Card className="max-w-md mx-auto">
+						<CardHeader>
+							<CardTitle>Content</CardTitle>
+						</CardHeader>
+						<CardContent className="space-y-6">
 							<FormField
 								control={form.control}
 								name="content"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Content</FormLabel>
 										<FormControl>
 											<RichTextEditor
 												content={field.value}
