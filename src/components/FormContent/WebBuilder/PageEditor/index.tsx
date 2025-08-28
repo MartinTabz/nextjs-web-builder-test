@@ -57,6 +57,7 @@ export default function PageEditor({ liveMode, showNavigation = true }: Props) {
 		>
 			{state.editor.previewMode && state.editor.liveMode && (
 				<Button
+					type="button"
 					variant={"ghost"}
 					size={"icon"}
 					className="w-6 h-6 bg-slate-600 p-[2px] fixed top-0 left-0 z-[100]"

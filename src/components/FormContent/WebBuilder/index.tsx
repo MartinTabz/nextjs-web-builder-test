@@ -27,11 +27,9 @@ export default function WebBuilder({
 		<div className="fixed top-0 bottom-0 left-0 right-0 z-[20] bg-background overflow-hidden">
 			<EditorProvider content={content} onChange={onChange} setOpen={setOpen}>
 				<WebBuilderNavigation />
-
 				<div className="h-full flex justify-center bg-sidebar">
 					<PageEditor liveMode={false} showNavigation={showNavigation} />
 				</div>
-
 				<PageEditorSidebar />
 			</EditorProvider>
 		</div>

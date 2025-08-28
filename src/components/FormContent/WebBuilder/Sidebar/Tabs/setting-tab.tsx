@@ -646,6 +646,7 @@ export default function SettingsTab() {
 							placeholder="#000000"
 						/>
 						<Button
+							type="button"
 							onClick={() => setBgClrPickerOpened(false)}
 							className="cursor-pointer w-full"
 							size={"sm"}
@@ -669,6 +670,7 @@ export default function SettingsTab() {
 							placeholder="#000000"
 						/>
 						<Button
+							type="button"
 							onClick={() => setClrPickerOpened(false)}
 							className="mb-1 cursor-pointer"
 							size={"sm"}

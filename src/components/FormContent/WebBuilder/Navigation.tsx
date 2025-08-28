@@ -84,6 +84,7 @@ export default function WebBuilderNavigation() {
 				</aside>
 				<aside className="flex items-center gap-2">
 					<Button
+						type="button"
 						variant={"ghost"}
 						size={"icon"}
 						className="hover:bg-slate-800"
@@ -92,6 +93,7 @@ export default function WebBuilderNavigation() {
 						<EyeIcon />
 					</Button>
 					<Button
+						type="button"
 						variant={"ghost"}
 						size={"icon"}
 						className="hover:bg-slate-800"
@@ -101,6 +103,7 @@ export default function WebBuilderNavigation() {
 						<Undo2 />
 					</Button>
 					<Button
+						type="button"
 						variant={"ghost"}
 						size={"icon"}
 						className="hover:bg-slate-800 mr-4"
@@ -111,7 +114,9 @@ export default function WebBuilderNavigation() {
 					>
 						<Redo2 />
 					</Button>
-					<Button onClick={handleOnSave}>Uložit & Zavřít</Button>
+					<Button type="button" onClick={handleOnSave}>
+						Uložit & Zavřít
+					</Button>
 				</aside>
 			</nav>
 		</TooltipProvider>

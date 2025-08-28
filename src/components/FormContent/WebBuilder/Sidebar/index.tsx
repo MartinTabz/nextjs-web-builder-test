@@ -67,7 +67,7 @@ export default function PageEditorSidebar() {
 								</SheetDescription>
 							</SheetHeader>
 							<div className="flex flex-col gap-3 p-6">
-								<Button>
+								<Button type="button">
 									<Upload />
 								</Button>
 								<div className="mt-2">
