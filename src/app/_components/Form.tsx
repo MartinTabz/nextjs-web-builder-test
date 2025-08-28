@@ -18,7 +18,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import RichTextEditor from "@/components/FormContent/RichTextEditor";
+import FormContentAdapter from "@/components/FormContent/Adapter";
 
 // Helper function to generate slug
 const generateSlug = (text: string) => {
@@ -48,7 +48,10 @@ const formSchema = z.object({
 		.refine(slugRefine, {
 			message: "Slug must contain only letters, numbers, and hyphens.",
 		}),
-	content: z.string().min(1, { message: "Content is required." }),
+	content: z.object({
+		type: z.enum(["rte", "web"]),
+		content: z.string().min(1, { message: "Content is required." }),
+	}),
 });
 
 export function SimpleForm() {
@@ -57,7 +60,7 @@ export function SimpleForm() {
 		defaultValues: {
 			name: "",
 			slug: "",
-			content: "",
+			content: { type: "rte", content: "" },
 		},
 	});
 
@@ -140,9 +143,9 @@ export function SimpleForm() {
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
-											<RichTextEditor
+											<FormContentAdapter
 												content={field.value}
-												onChange={field.onChange}
+												onUpdate={field.onChange}
 											/>
 										</FormControl>
 										<FormMessage />
